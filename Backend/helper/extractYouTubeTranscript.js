@@ -22,21 +22,21 @@ const extractYouTubeTranscript = async (videoUrl) => {
     } catch (error) {
         console.log('anupam Transcript python service failed, moving to manish python service');
 
-        // try {
-        //     const pythonResponse = await axios.get(`https://transcript-scrape.vercel.app/api/getTranscript/${videoId}`, { timeout: 15000 });
-        //     transcript = pythonResponse.data.transcript;
-        //     transcript = transcript.map((obj) => obj.text).join('\n');
-        // } catch (fallbackError) {
-        //     console.log('Both services failed:', fallbackError.message);
-        // }
+        try {
+            const pythonResponse = await axios.get(`https://transcript-scrape.vercel.app/api/getTranscript/${videoId}`, { timeout: 15000 });
+            transcript = pythonResponse.data.transcript;
+            transcript = transcript.map((obj) => obj.text).join('\n');
+        } catch (fallbackError) {
+            console.log('Both services failed:', fallbackError.message);
+        }
     }
 
     // If Python service failed, extract manually
-    // if (!transcript) {
-    //     const audioPath = await fetchYouTubeAudio(videoUrl);
-    //     const transcriptionResult = await transcribeAudioVideo(audioPath);
-    //     transcript = transcriptionResult.text;
-    // }
+    if (!transcript) {
+        const audioPath = await fetchYouTubeAudio(videoUrl);
+        const transcriptionResult = await transcribeAudioVideo(audioPath);
+        transcript = transcriptionResult.text;
+    }
 
     return { text: transcript, videoId };
 };
